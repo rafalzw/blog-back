@@ -1,8 +1,13 @@
-import { Body, Controller, Inject, Param, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Param, Patch, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { LoginUserResponse, RegisterUserResponse } from '../interfaces/user';
+import {
+  LoginUserResponse,
+  RegisterUserResponse,
+  UpdateUserResponse,
+} from '../interfaces/user';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { UpdateDto } from './dto/update.dto';
 
 @Controller('users')
 export class UsersController {
@@ -18,5 +23,13 @@ export class UsersController {
   @Post('/login')
   loginUser(@Body() user: LoginDto): Promise<LoginUserResponse> {
     return this.usersService.login(user);
+  }
+
+  @Patch('/:id')
+  updateUser(
+    @Body() user: UpdateDto,
+    @Param('id') id: string,
+  ): Promise<UpdateUserResponse> {
+    return this.usersService.update(id, user);
   }
 }

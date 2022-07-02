@@ -15,3 +15,7 @@ export type LoginUserResponse = {
   id: string;
   email: string;
 };
+export type UpdateUserResponse = {
+  id: string;
+  email: string;
+};
