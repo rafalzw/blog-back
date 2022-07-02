@@ -1,3 +1,5 @@
+import { User } from 'src/users/user.entity';
+
 export interface UserInterface {
   id: string;
   username: string;
@@ -21,3 +23,8 @@ export type UpdateUserResponse = {
 };
 
 export type DeleteUserResponse = { isSuccess: boolean };
+
+export type GetOneUserResponse = Pick<
+  User,
+  'id' | 'username' | 'email' | 'profilePicture'
+>;

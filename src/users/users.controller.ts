@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Inject,
   Param,
   Patch,
@@ -10,6 +11,7 @@ import {
 import { UsersService } from './users.service';
 import {
   DeleteUserResponse,
+  GetOneUserResponse,
   LoginUserResponse,
   RegisterUserResponse,
   UpdateUserResponse,
@@ -49,5 +51,10 @@ export class UsersController {
     @Param('id') id: string,
   ): Promise<DeleteUserResponse> {
     return this.usersService.delete(id, user);
+  }
+
+  @Get('/:id')
+  getOneUser(@Param('id') id: string): Promise<GetOneUserResponse> {
+    return this.usersService.getOne(id);
   }
 }

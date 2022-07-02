@@ -4,6 +4,7 @@ import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import {
   DeleteUserResponse,
+  GetOneUserResponse,
   LoginUserResponse,
   RegisterUserResponse,
   UpdateUserResponse,
@@ -82,6 +83,13 @@ export class UsersService {
     await User.delete(id);
 
     return { isSuccess: true };
+  }
+
+  async getOne(id: string): Promise<GetOneUserResponse> {
+    const user = await User.findOneOrFail({ where: { id } });
+    const { password, ...result } = user;
+
+    return result;
   }
 }
 
