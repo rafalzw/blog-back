@@ -9,6 +9,7 @@ import {
 } from '../interfaces/user';
 import { LoginDto } from './dto/login.dto';
 import { UpdateDto } from './dto/update.dto';
+import { DeleteDto } from './dto/delete.dto';
 
 @Injectable()
 export class UsersService {
@@ -68,6 +69,16 @@ export class UsersService {
     await updatedUser.save();
 
     return updatedUser;
+  }
+
+  async delete(id: string, user: DeleteDto) {
+    if (id !== user.id) {
+      throw new HttpException(
+        'You can delete only your account!!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    await User.delete(id);
   }
 }
 
