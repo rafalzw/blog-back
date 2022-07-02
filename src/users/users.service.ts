@@ -3,6 +3,7 @@ import { RegisterDto } from './dto/register.dto';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 import {
+  DeleteUserResponse,
   LoginUserResponse,
   RegisterUserResponse,
   UpdateUserResponse,
@@ -71,7 +72,7 @@ export class UsersService {
     return updatedUser;
   }
 
-  async delete(id: string, user: DeleteDto) {
+  async delete(id: string, user: DeleteDto): Promise<DeleteUserResponse> {
     if (id !== user.id) {
       throw new HttpException(
         'You can delete only your account!!',
@@ -79,6 +80,8 @@ export class UsersService {
       );
     }
     await User.delete(id);
+
+    return { isSuccess: true };
   }
 }
 

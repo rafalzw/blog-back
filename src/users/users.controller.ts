@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import {
+  DeleteUserResponse,
   LoginUserResponse,
   RegisterUserResponse,
   UpdateUserResponse,
@@ -43,7 +44,10 @@ export class UsersController {
   }
 
   @Delete('/:id')
-  deleteUser(@Body() user: DeleteDto, @Param('id') id: string) {
+  deleteUser(
+    @Body() user: DeleteDto,
+    @Param('id') id: string,
+  ): Promise<DeleteUserResponse> {
     return this.usersService.delete(id, user);
   }
 }

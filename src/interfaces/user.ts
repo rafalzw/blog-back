@@ -19,3 +19,5 @@ export type UpdateUserResponse = {
   id: string;
   email: string;
 };
+
+export type DeleteUserResponse = { isSuccess: boolean };
