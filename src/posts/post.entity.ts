@@ -11,7 +11,7 @@ import { PostInterface } from '../interfaces/post';
 import { User } from '../users/user.entity';
 
 @Entity()
-export class Post extends BaseEntity implements PostInterface {
+export class PostEntity extends BaseEntity implements PostInterface {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -28,6 +28,12 @@ export class Post extends BaseEntity implements PostInterface {
     default: () => 'CURRENT_TIMESTAMP',
   })
   createdAt: Date;
+
+  @Column({
+    default: null,
+    nullable: true,
+  })
+  updatedAt: Date;
 
   @ManyToOne((type) => User, (entity) => entity.post)
   @JoinColumn()
