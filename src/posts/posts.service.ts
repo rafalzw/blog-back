@@ -15,6 +15,27 @@ import { DeletePostDto } from './dto/delete-post.dto';
 export class PostsService {
   constructor(@Inject(UsersService) private usersService: UsersService) {}
 
+  async getAll(user) {
+    let posts;
+    if (user) {
+      posts = await PostEntity.find({
+        where: { user },
+        relations: ['user'],
+      });
+    } else {
+      posts = await PostEntity.find();
+    }
+
+    return posts;
+  }
+
+  async getOne(id: string): Promise<GetOnePostResponse> {
+    return await PostEntity.findOne({
+      where: { id },
+      relations: ['user'],
+    });
+  }
+
   async add(post: AddPostDto): Promise<PostEntity> {
     const { title, content, photo, userId } = post;
 
@@ -26,13 +47,6 @@ export class PostsService {
 
     await newPost.save();
     return newPost;
-  }
-
-  async getOne(id: string): Promise<GetOnePostResponse> {
-    return await PostEntity.findOne({
-      where: { id },
-      relations: ['user'],
-    });
   }
 
   async update(
