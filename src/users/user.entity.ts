@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserInterface } from '../interfaces/user';
-import { Post } from '../posts/post.entity';
+import { PostEntity } from '../posts/post.entity';
 
 @Entity()
 export class User extends BaseEntity implements UserInterface {
@@ -39,6 +39,6 @@ export class User extends BaseEntity implements UserInterface {
   })
   createdAt: Date;
 
-  @OneToMany((type) => Post, (entity) => entity.user)
-  post: Post[];
+  @OneToMany((type) => PostEntity, (entity) => entity.user)
+  post: PostEntity[];
 }
