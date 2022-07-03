@@ -11,6 +11,8 @@ export interface PostInterface {
 
 export type AddPostResponse = PostEntity;
 
+export type GetOnePostResponse = PostEntity;
+
 export type UpdatePostResponse = {
   id: string;
   title: string;

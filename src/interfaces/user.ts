@@ -15,11 +15,13 @@ export type RegisterUserResponse = {
 
 export type LoginUserResponse = {
   id: string;
+  username: string;
   email: string;
 };
 
 export type UpdateUserResponse = {
   id: string;
+  username: string;
   email: string;
 };
 

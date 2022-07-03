@@ -3,6 +3,7 @@ import { AddPostDto } from './dto/add-post.dto';
 import {
   AddPostResponse,
   DeletePostResponse,
+  GetOnePostResponse,
   UpdatePostResponse,
 } from '../interfaces/post';
 import { PostEntity } from './post.entity';
@@ -27,7 +28,7 @@ export class PostsService {
     return newPost;
   }
 
-  async getOne(id: string): Promise<PostEntity> {
+  async getOne(id: string): Promise<GetOnePostResponse> {
     return await PostEntity.findOne({
       where: { id },
       relations: ['user'],

@@ -46,7 +46,11 @@ export class UsersService {
       throw new HttpException('Invalid password!', HttpStatus.BAD_REQUEST);
     }
 
-    return userInDb;
+    return {
+      id: userInDb.id,
+      username: userInDb.username,
+      email: userInDb.email,
+    };
   }
 
   async update(id: string, user: UpdateDto): Promise<any> {
@@ -70,7 +74,11 @@ export class UsersService {
 
     await updatedUser.save();
 
-    return updatedUser;
+    return {
+      id: updatedUser.id,
+      username: updatedUser.username,
+      email: updatedUser.email,
+    };
   }
 
   async delete(id: string, user: DeleteDto): Promise<DeleteUserResponse> {

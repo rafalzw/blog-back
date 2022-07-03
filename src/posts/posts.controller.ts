@@ -10,7 +10,11 @@ import {
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { AddPostDto } from './dto/add-post.dto';
-import { AddPostResponse, DeletePostResponse } from '../interfaces/post';
+import {
+  AddPostResponse,
+  DeletePostResponse,
+  GetOnePostResponse,
+} from '../interfaces/post';
 import { PostEntity } from './post.entity';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { DeletePostDto } from './dto/delete-post.dto';
@@ -22,7 +26,7 @@ export class PostsController {
   ) {}
 
   @Get('/:id')
-  getOnePost(@Param('id') id: string) {
+  getOnePost(@Param('id') id: string): Promise<GetOnePostResponse> {
     return this.postsService.getOne(id);
   }
 
