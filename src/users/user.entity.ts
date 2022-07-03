@@ -1,5 +1,12 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { UserInterface } from '../interfaces/user';
+import { Post } from '../posts/post.entity';
 
 @Entity()
 export class User extends BaseEntity implements UserInterface {
@@ -31,4 +38,7 @@ export class User extends BaseEntity implements UserInterface {
     default: () => 'CURRENT_TIMESTAMP',
   })
   createdAt: Date;
+
+  @OneToMany((type) => Post, (entity) => entity.user)
+  post: Post[];
 }
