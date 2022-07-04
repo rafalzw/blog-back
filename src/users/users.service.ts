@@ -29,6 +29,7 @@ export class UsersService {
 
     return {
       id: newUser.id,
+      username: newUser.username,
       email: newUser.email,
     };
   }

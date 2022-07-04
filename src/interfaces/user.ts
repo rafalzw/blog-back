@@ -10,6 +10,7 @@ export interface UserInterface {
 
 export type RegisterUserResponse = {
   id: string;
+  username: string;
   email: string;
 };
 

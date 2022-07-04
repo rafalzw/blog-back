@@ -6,7 +6,6 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { UserInterface } from '../interfaces/user';
 import { PostInterface } from '../interfaces/post';
 import { User } from '../users/user.entity';
 

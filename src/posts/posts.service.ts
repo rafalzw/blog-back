@@ -54,6 +54,11 @@ export class PostsService {
     updatedPost: UpdatePostDto,
   ): Promise<UpdatePostResponse> {
     const post = await this.getOne(id);
+
+    if (!post) {
+      throw new HttpException('Post not found!', HttpStatus.BAD_REQUEST);
+    }
+
     if (post.user.id !== String(updatedPost.user)) {
       throw new HttpException(
         'You can edit only your posts!',
@@ -78,6 +83,11 @@ export class PostsService {
     updatedPost: DeletePostDto,
   ): Promise<DeletePostResponse> {
     const post = await this.getOne(id);
+
+    if (!post) {
+      throw new HttpException('Post not found!', HttpStatus.BAD_REQUEST);
+    }
+
     if (post.user.id !== String(updatedPost.user)) {
       throw new HttpException(
         'You can delete only your posts!',
