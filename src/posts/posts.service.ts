@@ -59,7 +59,7 @@ export class PostsService {
       throw new HttpException('Post not found!', HttpStatus.BAD_REQUEST);
     }
 
-    if (post.user.id !== String(updatedPost.user)) {
+    if (post.user.id !== updatedPost.user) {
       throw new HttpException(
         'You can edit only your posts!',
         HttpStatus.BAD_REQUEST,
