@@ -3,9 +3,10 @@ import { AddPostDto } from './dto/add-post.dto';
 import {
   AddPostResponse,
   DeletePostResponse,
+  GetAllPostsResponse,
   GetOnePostResponse,
   UpdatePostResponse,
-} from '../interfaces/post';
+} from '../types/post';
 import { PostEntity } from './post.entity';
 import { UsersService } from '../users/users.service';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -15,15 +16,19 @@ import { DeletePostDto } from './dto/delete-post.dto';
 export class PostsService {
   constructor(@Inject(UsersService) private usersService: UsersService) {}
 
-  async getAll(user) {
+  async getAll(query): Promise<GetAllPostsResponse> {
     let posts;
-    if (user) {
+
+    if (query.id) {
+      const user = await this.usersService.getOne(query.id);
       posts = await PostEntity.find({
         where: { user },
         relations: ['user'],
       });
     } else {
-      posts = await PostEntity.find();
+      posts = await PostEntity.find({
+        relations: ['user'],
+      });
     }
 
     return posts;
@@ -36,7 +41,7 @@ export class PostsService {
     });
   }
 
-  async add(post: AddPostDto): Promise<PostEntity> {
+  async add(post: AddPostDto): Promise<AddPostResponse> {
     const { title, content, photo, userId } = post;
 
     const newPost = new PostEntity();
@@ -70,7 +75,7 @@ export class PostsService {
     post.photo = updatedPost.photo;
     post.updatedAt = new Date();
 
-    await post.save();
+    await (post as PostEntity).save();
 
     return {
       id: post.id,
@@ -94,7 +99,7 @@ export class PostsService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    await post.remove();
+    await (post as PostEntity).remove();
 
     return {
       isSuccess: true,
