@@ -71,10 +71,7 @@ export class PostsController {
   }
 
   @Delete('/:id')
-  deletePost(
-    @Body() updatedPost: DeletePostDto,
-    @Param('id') id: string,
-  ): Promise<DeletePostResponse> {
-    return this.postsService.delete(id, updatedPost);
+  deletePost(@Param('id') id: string): Promise<DeletePostResponse> {
+    return this.postsService.delete(id);
   }
 }

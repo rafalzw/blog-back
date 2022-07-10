@@ -112,23 +112,16 @@ export class PostsService {
     };
   }
 
-  async delete(
-    id: string,
-    updatedPost: DeletePostDto,
-  ): Promise<DeletePostResponse> {
+  async delete(id: string): Promise<DeletePostResponse> {
     const post = await this.getOne(id);
+    const DB = PostEntity;
+    console.log(post);
 
     if (!post) {
       throw new HttpException('Post not found!', HttpStatus.BAD_REQUEST);
     }
 
-    if (post.user.id !== String(updatedPost.user)) {
-      throw new HttpException(
-        'You can delete only your posts!',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-    await (post as PostEntity).remove();
+    await DB.delete(post.id);
 
     return {
       isSuccess: true,
