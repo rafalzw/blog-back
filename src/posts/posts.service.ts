@@ -5,16 +5,26 @@ import {
   DeletePostResponse,
   GetAllPostsResponse,
   GetOnePostResponse,
+  PostInterface,
   UpdatePostResponse,
 } from '../types/post';
 import { PostEntity } from './post.entity';
 import { UsersService } from '../users/users.service';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { DeletePostDto } from './dto/delete-post.dto';
+import { MulterDiskUploadedFiles } from '../types/files';
+import * as fs from 'fs';
+import * as path from 'path';
+import { storageDir } from '../utils/storage';
 
 @Injectable()
 export class PostsService {
   constructor(@Inject(UsersService) private usersService: UsersService) {}
+
+  filter(post: PostEntity): PostInterface {
+    const { id, title, content, photo, createdAt, updatedAt, user } = post;
+    return { id, title, content, photo, createdAt, updatedAt, user };
+  }
 
   async getAll(query): Promise<GetAllPostsResponse> {
     let posts;
@@ -31,27 +41,46 @@ export class PostsService {
       });
     }
 
-    return posts;
+    return posts.map(this.filter);
   }
 
   async getOne(id: string): Promise<GetOnePostResponse> {
-    return await PostEntity.findOne({
+    const post = await PostEntity.findOne({
       where: { id },
       relations: ['user'],
     });
+    return this.filter(post);
   }
 
-  async add(post: AddPostDto): Promise<AddPostResponse> {
-    const { title, content, photo, userId } = post;
+  async add(
+    post: AddPostDto,
+    files: MulterDiskUploadedFiles,
+  ): Promise<AddPostResponse> {
+    const { title, content, userId } = post;
+    const photo = files?.photo?.[0] ?? null;
 
-    const newPost = new PostEntity();
-    newPost.title = title;
-    newPost.content = content;
-    newPost.photo = photo;
-    newPost.user = userId;
+    try {
+      const newPost = new PostEntity();
+      newPost.title = title;
+      newPost.content = content;
+      newPost.user = userId;
 
-    await newPost.save();
-    return newPost;
+      if (photo) {
+        newPost.photo = photo.filename;
+      }
+
+      await newPost.save();
+
+      return this.filter(newPost);
+    } catch (e) {
+      try {
+        if (photo) {
+          fs.unlinkSync(path.join(storageDir(), 'post-photos', photo.filename));
+        }
+      } catch (e2) {}
+
+      throw e;
+    }
   }
 
   async update(
@@ -72,7 +101,7 @@ export class PostsService {
     }
     post.title = updatedPost.title;
     post.content = updatedPost.content;
-    post.photo = updatedPost.photo;
+    // post.photo = updatedPost.photo;
     post.updatedAt = new Date();
 
     await (post as PostEntity).save();

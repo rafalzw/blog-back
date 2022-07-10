@@ -8,6 +8,8 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { AddPostDto } from './dto/add-post.dto';
@@ -16,14 +18,14 @@ import {
   DeletePostResponse,
   GetAllPostsResponse,
   GetOnePostResponse,
-  PostInterface,
   UpdatePostResponse,
 } from '../types/post';
-import { PostEntity } from './post.entity';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { DeletePostDto } from './dto/delete-post.dto';
-import { User } from '../users/user.entity';
-import { UserInterface } from '../types';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import * as path from 'path';
+import { MulterDiskUploadedFiles } from '../types/files';
+import { multerStorage, storageDir } from '../utils/storage';
 
 @Controller('posts')
 export class PostsController {
@@ -42,8 +44,22 @@ export class PostsController {
   }
 
   @Post('/')
-  addPost(@Body() post: AddPostDto): Promise<AddPostResponse> {
-    return this.postsService.add(post);
+  @UseInterceptors(
+    FileFieldsInterceptor(
+      [
+        {
+          name: 'photo',
+          maxCount: 1,
+        },
+      ],
+      { storage: multerStorage(path.join(storageDir(), 'post-photos')) },
+    ),
+  )
+  addPost(
+    @Body() post: AddPostDto,
+    @UploadedFiles() files: MulterDiskUploadedFiles,
+  ): Promise<AddPostResponse> {
+    return this.postsService.add(post, files);
   }
 
   @Patch('/:id')

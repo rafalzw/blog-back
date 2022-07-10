@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
@@ -8,13 +8,19 @@ import {
   LoginUserResponse,
   RegisterUserResponse,
   UpdateUserResponse,
-} from '../interfaces/user';
+  UserInterface,
+} from '../types/user';
 import { LoginDto } from './dto/login.dto';
 import { UpdateDto } from './dto/update.dto';
 import { DeleteDto } from './dto/delete.dto';
 
 @Injectable()
 export class UsersService {
+  filter(user: User): UserInterface {
+    const { id, username, email } = user;
+    return { id, username, email };
+  }
+
   async register(user: RegisterDto): Promise<RegisterUserResponse> {
     const { username, email, password } = user;
     const salt = await bcrypt.genSalt(10);
@@ -35,9 +41,9 @@ export class UsersService {
   }
 
   async login(user: LoginDto): Promise<LoginUserResponse> {
-    const { email, password } = user;
+    const { username, password } = user;
 
-    const userInDb = await User.findOne({ where: { email } });
+    const userInDb = await User.findOne({ where: { username } });
     if (!userInDb) {
       throw new HttpException('Invalid email!', HttpStatus.BAD_REQUEST);
     }
@@ -51,10 +57,11 @@ export class UsersService {
       id: userInDb.id,
       username: userInDb.username,
       email: userInDb.email,
+      // profilePicture: userInDb.profilePicture,
     };
   }
 
-  async update(id: string, user: UpdateDto): Promise<any> {
+  async update(id: string, user: UpdateDto): Promise<UpdateUserResponse> {
     if (user.id !== id) {
       throw new HttpException(
         'You can update only your account!!',
@@ -96,9 +103,8 @@ export class UsersService {
 
   async getOne(id: string): Promise<GetOneUserResponse> {
     const user = await User.findOneOrFail({ where: { id } });
-    const { password, ...result } = user;
 
-    return result;
+    return this.filter(user);
   }
 }
 

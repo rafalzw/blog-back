@@ -5,7 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { UserInterface } from '../interfaces/user';
+import { UserInterface } from '../types/user';
 import { PostEntity } from '../posts/post.entity';
 
 @Entity()

@@ -2,9 +2,9 @@ export interface UserInterface {
   id: string;
   username: string;
   email: string;
-  password: string;
-  profilePicture?: string;
-  createdAt: Date | string;
+  // password: string;
+  // profilePicture?: string;
+  // createdAt: Date | string;
 }
 
 export type RegisterUserResponse = {
@@ -17,6 +17,7 @@ export type LoginUserResponse = {
   id: string;
   username: string;
   email: string;
+  // profilePicture: string;
 };
 
 export type UpdateUserResponse = {
@@ -27,7 +28,4 @@ export type UpdateUserResponse = {
 
 export type DeleteUserResponse = { isSuccess: boolean };
 
-export type GetOneUserResponse = Pick<
-  UserInterface,
-  'id' | 'username' | 'email' | 'profilePicture'
->;
+export type GetOneUserResponse = UserInterface;

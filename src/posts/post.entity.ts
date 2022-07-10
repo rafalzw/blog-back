@@ -6,8 +6,9 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { PostInterface } from '../interfaces/post';
+import { PostInterface } from '../types/post';
 import { User } from '../users/user.entity';
+import { UserInterface } from '../types';
 
 @Entity()
 export class PostEntity extends BaseEntity implements PostInterface {
@@ -20,7 +21,10 @@ export class PostEntity extends BaseEntity implements PostInterface {
   @Column()
   content: string;
 
-  @Column()
+  @Column({
+    default: null,
+    nullable: true,
+  })
   photo: string;
 
   @Column({
@@ -34,7 +38,7 @@ export class PostEntity extends BaseEntity implements PostInterface {
   })
   updatedAt: Date;
 
-  @ManyToOne((type) => User, (entity) => entity.post)
+  @ManyToOne((type) => User, (entity: User) => entity.post)
   @JoinColumn()
-  user: User;
+  user: UserInterface;
 }

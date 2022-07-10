@@ -15,7 +15,7 @@ import {
   LoginUserResponse,
   RegisterUserResponse,
   UpdateUserResponse,
-} from '../interfaces/user';
+} from '../types/user';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { UpdateDto } from './dto/update.dto';
