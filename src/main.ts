@@ -12,6 +12,9 @@ async function bootstrap() {
   app.useStaticAssets(path.join(__dirname, '..', 'storage/post-photos'), {
     prefix: '/api/post-photos',
   });
+  app.useStaticAssets(path.join(__dirname, '..', 'storage/user-photos'), {
+    prefix: '/api/user-photos',
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       forbidNonWhitelisted: true,

@@ -13,12 +13,16 @@ import {
 import { LoginDto } from './dto/login.dto';
 import { UpdateDto } from './dto/update.dto';
 import { DeleteDto } from './dto/delete.dto';
+import { MulterDiskUploadedFiles } from '../types/files';
+import fs from 'fs';
+import path from 'path';
+import { storageDir } from '../utils/storage';
 
 @Injectable()
 export class UsersService {
   filter(user: User): UserInterface {
-    const { id, username, email } = user;
-    return { id, username, email };
+    const { id, username, email, profilePicture } = user;
+    return { id, username, email, profilePicture };
   }
 
   async register(user: RegisterDto): Promise<RegisterUserResponse> {
@@ -57,11 +61,17 @@ export class UsersService {
       id: userInDb.id,
       username: userInDb.username,
       email: userInDb.email,
-      // profilePicture: userInDb.profilePicture,
+      profilePicture: userInDb.profilePicture,
     };
   }
 
-  async update(id: string, user: UpdateDto): Promise<UpdateUserResponse> {
+  async update(
+    id: string,
+    user: UpdateDto,
+    files: MulterDiskUploadedFiles,
+  ): Promise<UpdateUserResponse> {
+    const photo = files?.photo?.[0] ?? null;
+
     if (user.id !== id) {
       throw new HttpException(
         'You can update only your account!!',
@@ -74,19 +84,33 @@ export class UsersService {
       user.password = await bcrypt.hash(user.password, salt);
     }
 
-    const updatedUser = await User.findOne({ where: { id } });
-    updatedUser.username = user.username;
-    updatedUser.email = user.email;
-    updatedUser.password = user.password;
-    updatedUser.profilePicture = user.profilePicture;
+    try {
+      const updatedUser = await User.findOne({ where: { id } });
+      updatedUser.username = user.username;
+      updatedUser.email = user.email;
+      updatedUser.password = user.password;
 
-    await updatedUser.save();
+      if (photo) {
+        updatedUser.profilePicture = photo.filename;
+      }
 
-    return {
-      id: updatedUser.id,
-      username: updatedUser.username,
-      email: updatedUser.email,
-    };
+      await updatedUser.save();
+
+      return {
+        id: updatedUser.id,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        profilePicture: updatedUser.profilePicture,
+      };
+    } catch (e) {
+      try {
+        if (photo) {
+          fs.unlinkSync(path.join(storageDir(), 'user-photos', photo.filename));
+        }
+      } catch (e2) {}
+
+      throw e;
+    }
   }
 
   async delete(id: string, user: DeleteDto): Promise<DeleteUserResponse> {

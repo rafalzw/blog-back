@@ -7,6 +7,9 @@ import {
   Param,
   Patch,
   Post,
+  Put,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import {
@@ -20,6 +23,10 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { UpdateDto } from './dto/update.dto';
 import { DeleteDto } from './dto/delete.dto';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import { multerStorage, storageDir } from '../utils/storage';
+import * as path from 'path';
+import { MulterDiskUploadedFiles } from '../types/files';
 
 @Controller('users')
 export class UsersController {
@@ -37,12 +44,24 @@ export class UsersController {
     return this.usersService.login(user);
   }
 
-  @Patch('/:id')
+  @Put('/:id')
+  @UseInterceptors(
+    FileFieldsInterceptor(
+      [
+        {
+          name: 'photo',
+          maxCount: 1,
+        },
+      ],
+      { storage: multerStorage(path.join(storageDir(), 'user-photos')) },
+    ),
+  )
   updateUser(
     @Body() user: UpdateDto,
     @Param('id') id: string,
+    @UploadedFiles() files: MulterDiskUploadedFiles,
   ): Promise<UpdateUserResponse> {
-    return this.usersService.update(id, user);
+    return this.usersService.update(id, user, files);
   }
 
   @Delete('/:id')

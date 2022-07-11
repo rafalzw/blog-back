@@ -2,9 +2,7 @@ export interface UserInterface {
   id: string;
   username: string;
   email: string;
-  // password: string;
-  // profilePicture?: string;
-  // createdAt: Date | string;
+  profilePicture?: string;
 }
 
 export type RegisterUserResponse = {
@@ -17,14 +15,10 @@ export type LoginUserResponse = {
   id: string;
   username: string;
   email: string;
-  // profilePicture: string;
+  profilePicture: string;
 };
 
-export type UpdateUserResponse = {
-  id: string;
-  username: string;
-  email: string;
-};
+export type UpdateUserResponse = UserInterface;
 
 export type DeleteUserResponse = { isSuccess: boolean };
 
