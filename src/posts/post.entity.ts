@@ -18,7 +18,9 @@ export class PostEntity extends BaseEntity implements PostInterface {
   @Column()
   title: string;
 
-  @Column()
+  @Column({
+    type: 'text',
+  })
   content: string;
 
   @Column({

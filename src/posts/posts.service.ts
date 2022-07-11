@@ -11,7 +11,6 @@ import {
 import { PostEntity } from './post.entity';
 import { UsersService } from '../users/users.service';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { DeletePostDto } from './dto/delete-post.dto';
 import { MulterDiskUploadedFiles } from '../types/files';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -104,7 +103,9 @@ export class PostsService {
     // post.photo = updatedPost.photo;
     post.updatedAt = new Date();
 
-    await (post as PostEntity).save();
+    await PostEntity.save(
+      Object.assign({}, post, post.title, post.content, post.updatedAt),
+    );
 
     return {
       id: post.id,

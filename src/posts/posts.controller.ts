@@ -5,8 +5,8 @@ import {
   Get,
   Inject,
   Param,
-  Patch,
   Post,
+  Put,
   Query,
   UploadedFiles,
   UseInterceptors,
@@ -21,7 +21,6 @@ import {
   UpdatePostResponse,
 } from '../types/post';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { DeletePostDto } from './dto/delete-post.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import * as path from 'path';
 import { MulterDiskUploadedFiles } from '../types/files';
@@ -62,7 +61,7 @@ export class PostsController {
     return this.postsService.add(post, files);
   }
 
-  @Patch('/:id')
+  @Put('/:id')
   updatePost(
     @Body() updatedPost: UpdatePostDto,
     @Param('id') id: string,
