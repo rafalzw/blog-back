@@ -1,7 +1,6 @@
+import { IsString } from 'class-validator';
+
 export class DeleteDto {
+  @IsString()
   id: string;
-  title: string;
-  content: string;
-  photo: string;
-  user: string;
 }

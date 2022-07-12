@@ -21,7 +21,6 @@ export class User extends BaseEntity implements UserInterface {
 
   @Column({
     length: 255,
-    unique: true,
   })
   email: string;
 

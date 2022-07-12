@@ -1,11 +1,15 @@
-import { User } from '../../users/user.entity';
-import { IsString } from 'class-validator';
+import { IsNotEmpty, IsObject, IsString } from 'class-validator';
+import { UserInterface } from '../../types';
 
 export class AddPostDto {
+  @IsNotEmpty()
   @IsString()
   title: string;
+
+  @IsNotEmpty()
   @IsString()
   content: string;
-  // photo: string;
-  userId: User;
+
+  @IsString()
+  userId: UserInterface;
 }

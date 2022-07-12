@@ -5,7 +5,6 @@ import {
   Get,
   Inject,
   Param,
-  Patch,
   Post,
   Put,
   UploadedFiles,

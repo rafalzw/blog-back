@@ -116,7 +116,6 @@ export class PostsService {
   async delete(id: string): Promise<DeletePostResponse> {
     const post = await this.getOne(id);
     const DB = PostEntity;
-    console.log(post);
 
     if (!post) {
       throw new HttpException('Post not found!', HttpStatus.BAD_REQUEST);

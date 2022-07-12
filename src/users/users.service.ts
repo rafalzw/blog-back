@@ -46,6 +46,7 @@ export class UsersService {
 
   async login(user: LoginDto): Promise<LoginUserResponse> {
     const { username, password } = user;
+    console.log(user);
 
     const userInDb = await User.findOne({ where: { username } });
     if (!userInDb) {
@@ -71,6 +72,7 @@ export class UsersService {
     files: MulterDiskUploadedFiles,
   ): Promise<UpdateUserResponse> {
     const photo = files?.photo?.[0] ?? null;
+    console.log(user);
 
     if (user.id !== id) {
       throw new HttpException(
