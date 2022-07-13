@@ -34,5 +34,5 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-database.providers.ts
+/src/config/config.ts
 /storage
