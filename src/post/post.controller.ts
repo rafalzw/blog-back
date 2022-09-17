@@ -11,7 +11,7 @@ import {
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
-import { PostsService } from './posts.service';
+import { PostService } from './post.service';
 import { AddPostDto } from './dto/add-post.dto';
 import {
   AddPostResponse,
@@ -26,10 +26,10 @@ import * as path from 'path';
 import { MulterDiskUploadedFiles } from '../types/files';
 import { multerStorage, storageDir } from '../utils/storage';
 
-@Controller('posts')
-export class PostsController {
+@Controller('post')
+export class PostController {
   constructor(
-    @Inject(PostsService) private readonly postsService: PostsService,
+    @Inject(PostService) private readonly postsService: PostService,
   ) {}
 
   @Get('/')

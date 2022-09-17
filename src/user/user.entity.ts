@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserInterface } from '../types/user';
-import { PostEntity } from '../posts/post.entity';
+import { PostEntity } from '../post/post.entity';
 
 @Entity()
 export class User extends BaseEntity implements UserInterface {
@@ -26,6 +26,12 @@ export class User extends BaseEntity implements UserInterface {
 
   @Column()
   password: string;
+
+  @Column({
+    nullable: true,
+    default: null,
+  })
+  currentTokenId: string | null;
 
   @Column({
     default: null,

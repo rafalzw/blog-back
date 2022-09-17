@@ -3,11 +3,13 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as path from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true,
   });
+
   app.setGlobalPrefix('api');
   app.useStaticAssets(path.join(__dirname, '..', 'storage/post-photos'), {
     prefix: '/api/post-photos',
@@ -25,6 +27,7 @@ async function bootstrap() {
       },
     }),
   );
+  app.use(cookieParser());
   await app.listen(3001);
 }
 bootstrap();

@@ -19,7 +19,7 @@ import path from 'path';
 import { storageDir } from '../utils/storage';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   filter(user: User): UserInterface {
     const { id, username, email, profilePicture } = user;
     return { id, username, email, profilePicture };
@@ -46,7 +46,6 @@ export class UsersService {
 
   async login(user: LoginDto): Promise<LoginUserResponse> {
     const { username, password } = user;
-    console.log(user);
 
     const userInDb = await User.findOne({ where: { username } });
     if (!userInDb) {
