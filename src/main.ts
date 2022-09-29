@@ -4,11 +4,11 @@ import { AppModule } from './app.module';
 import * as path from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as cookieParser from 'cookie-parser';
+import { config } from './config/config';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-    cors: true,
-  });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.enableCors({ origin: config.corsOrigin, credentials: true });
 
   app.setGlobalPrefix('api');
   app.useStaticAssets(path.join(__dirname, '..', 'storage/post-photos'), {
