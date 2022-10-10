@@ -53,17 +53,32 @@ export class AuthService {
 
         return res
           .cookie('jwt', token.accessToken, {
-            secure: false,
+            secure: true,
             httpOnly: true,
           })
           .json({
             isSuccess: true,
+            id: user.id,
             username: user.username,
             email: user.email,
           });
       }
 
       return res.json({ error: 'Invalid login data!' });
+    } catch (e) {
+      return res.json({ error: e.message });
+    }
+  }
+
+  async logout(user: User, res: Response) {
+    try {
+      user.currentTokenId = null;
+      await user.save();
+      res.clearCookie('jwt', {
+        secure: true,
+        httpOnly: true,
+      });
+      return res.json({ isSuccess: true });
     } catch (e) {
       return res.json({ error: e.message });
     }
