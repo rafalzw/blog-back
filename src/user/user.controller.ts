@@ -10,7 +10,7 @@ import {
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { UserService } from './user.service';
 import {
   DeleteUserResponse,
   GetOneUserResponse,
@@ -27,10 +27,10 @@ import { multerStorage, storageDir } from '../utils/storage';
 import * as path from 'path';
 import { MulterDiskUploadedFiles } from '../types/files';
 
-@Controller('users')
-export class UsersController {
+@Controller('user')
+export class UserController {
   constructor(
-    @Inject(UsersService) private readonly usersService: UsersService,
+    @Inject(UserService) private readonly usersService: UserService,
   ) {}
 
   @Post('/register')

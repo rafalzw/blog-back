@@ -9,7 +9,7 @@ import {
   UpdatePostResponse,
 } from '../types/post';
 import { PostEntity } from './post.entity';
-import { UsersService } from '../users/users.service';
+import { UserService } from '../user/user.service';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { MulterDiskUploadedFiles } from '../types/files';
 import * as fs from 'fs';
@@ -17,8 +17,8 @@ import * as path from 'path';
 import { storageDir } from '../utils/storage';
 
 @Injectable()
-export class PostsService {
-  constructor(@Inject(UsersService) private usersService: UsersService) {}
+export class PostService {
+  constructor(@Inject(UserService) private usersService: UserService) {}
 
   filter(post: PostEntity): PostInterface {
     const { id, title, content, photo, createdAt, updatedAt, user } = post;
@@ -94,13 +94,12 @@ export class PostsService {
 
     if (post.user.id !== updatedPost.user) {
       throw new HttpException(
-        'You can edit only your posts!',
+        'You can edit only your post!',
         HttpStatus.BAD_REQUEST,
       );
     }
     post.title = updatedPost.title;
     post.content = updatedPost.content;
-    // post.photo = updatedPost.photo;
     post.updatedAt = new Date();
 
     await PostEntity.save(

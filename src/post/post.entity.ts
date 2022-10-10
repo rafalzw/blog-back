@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { PostInterface } from '../types/post';
-import { User } from '../users/user.entity';
+import { User } from '../user/user.entity';
 import { UserInterface } from '../types';
 
 @Entity()
